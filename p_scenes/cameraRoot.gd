@@ -7,6 +7,7 @@ extends Node3D
 @export var invert_y: int = -1;
 @onready var cam_root = get_node(".");
 @onready var cam_xrot = get_node("cam_xrot");
+@onready var player_cam = get_node("cam_xrot/SpringArm3D/Camera3D");
 @export var mouse_sensitivity = 0.03;
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -16,7 +17,8 @@ func _process(delta):
 	#cam_root.position = player.position
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		cam_xrot.rotate_x(deg_to_rad((invert_y*event.relative.y) * mouse_sensitivity));
+		if player_cam.current == true:
+			cam_xrot.rotate_x(deg_to_rad((invert_y*event.relative.y) * mouse_sensitivity));
 		cam_root.rotate_y(deg_to_rad((invert_x*event.relative.x) * mouse_sensitivity));
 		
 func track_rotation(player, root, sway):

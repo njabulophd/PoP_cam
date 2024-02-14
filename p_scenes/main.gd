@@ -6,6 +6,7 @@ var disable_cam_change = false;
 @onready var scene_cam = get_node("scene_cam");
 @onready var area_cam = get_node("room_00/room_cam/Camera3D");
 @onready var player_cam = get_node("cameraRoot/cam_xrot/SpringArm3D/Camera3D");
+@onready var player_cam_rotation = get_node("cameraRoot");
 var entered_room : bool  = false;
 # @onready var environment_cam = get_node("Camera3D")
 # Called when the node enters the scene tree for the first time.
@@ -22,6 +23,8 @@ func _process(delta):
 		changed_cam = !changed_cam;
 		scene_cam.current = changed_cam;
 		print("After change: ",changed_cam)
+	if Input.is_action_pressed("move_forward") and player_cam.current == true:
+		player.rotation.y = player_cam_rotation.rotation.y
 
 func _on_room_00_body_entered(body):
 	print(body, " has entered the area");
