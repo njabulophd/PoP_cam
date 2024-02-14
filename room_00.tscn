@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://df2wglw4wcyel"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mn70m"]
+
+[node name="room_00" type="Area3D"]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.496442, 0)
+shape = SubResource("BoxShape3D_mn70m")
+
+[node name="room_cam" type="Node3D" parent="."]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.4, 0.899999, 0.4)
+
+[node name="Camera3D" type="Camera3D" parent="room_cam"]

@@ -1,0 +1,108 @@
+[gd_scene load_steps=16 format=3 uid="uid://qlje481k5cc1"]
+
+[ext_resource type="Script" path="res://p_scenes/main.gd" id="1_4knv8"]
+[ext_resource type="Texture2D" uid="uid://bpxss45gigbag" path="res://grids/Purple/texture_13.png" id="1_jj6ns"]
+[ext_resource type="Texture2D" uid="uid://dcxco25mu7jyr" path="res://grids/Red/texture_11.png" id="2_clnk0"]
+[ext_resource type="Texture2D" uid="uid://vn07b2x8e07l" path="res://grids/Dark/texture_06.png" id="3_6w77r"]
+[ext_resource type="PackedScene" uid="uid://bxlyeiq7874tq" path="res://p_scenes/player.tscn" id="4_212aj"]
+[ext_resource type="Script" path="res://p_scenes/cameraRoot.gd" id="6_hei2y"]
+[ext_resource type="PackedScene" uid="uid://df2wglw4wcyel" path="res://room_00.tscn" id="7_2ke8k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mo7f0"]
+albedo_texture = ExtResource("1_jj6ns")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frd0s"]
+albedo_texture = ExtResource("2_clnk0")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6xbq2"]
+albedo_texture = ExtResource("3_6w77r")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1insc"]
+sky_top_color = Color(0.341176, 0.87451, 0.960784, 1)
+
+[sub_resource type="Sky" id="Sky_m1jke"]
+sky_material = SubResource("ProceduralSkyMaterial_1insc")
+
+[sub_resource type="Environment" id="Environment_e4jnw"]
+background_mode = 2
+sky = SubResource("Sky_m1jke")
+
+[sub_resource type="Curve3D" id="Curve3D_hgunt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.39502, 0, 0.0523257, 0, 0, 0, 0, 0, 0, 12.8109, 0, -0.155983, 0, 0, 0, 0, 0, 0, 14.6857, 0, -5.9053, 0, 0, 0, 0, 0, 0, 9.43633, 0, -6.07195, 0, 0, 0, 0, 0, 0, 12.436, 0, -4.03052, 0, 0, 0, 0, 0, 0, 9.01971, 0, -1.9891, 0, 0, 0, 0, 0, 0, 5.81176, 0, -1.9891, 0, 0, 0, 0, 0, 0, 5.7701, 0, -6.19693, 0, 0, 0, 0, 0, 0, 0.687368, 0, -6.15527),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
+
+[sub_resource type="BoxMesh" id="BoxMesh_wrh5r"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_4knv8")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+radius = 2.0
+height = 8.0
+material = SubResource("StandardMaterial3D_mo7f0")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.57007, 0.460595, 4.58252)
+size = Vector3(4.14014, 0.720703, 1)
+material = SubResource("StandardMaterial3D_frd0s")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 0.2, 0, 0, 0, 100, 0, 0, 0)
+use_collision = true
+material = SubResource("StandardMaterial3D_6xbq2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 2, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_e4jnw")
+
+[node name="cameraRoot" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("6_hei2y")
+player = NodePath("../player")
+
+[node name="cam_xrot" type="Node3D" parent="cameraRoot"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="cameraRoot/cam_xrot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 3.5)
+
+[node name="Camera3D" type="Camera3D" parent="cameraRoot/cam_xrot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+
+[node name="player" parent="." groups=["player"] instance=ExtResource("4_212aj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, -7)
+
+[node name="room_00" parent="." instance=ExtResource("7_2ke8k")]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, -30, 0, 33)
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_hgunt")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-0.008182, 0, -0.999966, 0, 1, 0, 0.999966, 0, -0.008182, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Path3D/PathFollow3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+visible = false
+mesh = SubResource("BoxMesh_wrh5r")
+
+[node name="scene_cam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 21, -7.43094e-07)
+
+[connection signal="body_entered" from="room_00" to="." method="_on_room_00_body_entered"]
+[connection signal="body_exited" from="room_00" to="." method="_on_room_00_body_exited"]
